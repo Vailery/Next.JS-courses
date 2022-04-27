@@ -28,9 +28,7 @@ async function handler(req, res) {
       const url = "mongodb://localhost:27017";
       client = await MongoClient.connect(url);
     } catch (error) {
-      res
-        .status(500)
-        .json({ message: error.message || "Could not connect to database." });
+      res.status(500).json({ message: "Could not connect to database." });
       return;
     }
 
@@ -42,9 +40,7 @@ async function handler(req, res) {
       newMessage.id = result.insertedId;
     } catch (error) {
       client.close();
-      res
-        .status(500)
-        .json({ message: error.message || "Storing message failed!" });
+      res.status(500).json({ message: "Storing message failed!" });
       return;
     }
 
