@@ -1,6 +1,6 @@
-// import { MongoClient } from "mongodb";
+import { MongoClient } from "mongodb";
 
-function handler(req, res) {
+async function handler(req, res) {
   if (req.method === "POST") {
     const { email, name, message } = req.body;
 
@@ -22,35 +22,33 @@ function handler(req, res) {
       message,
     };
 
-    // let client;
+    let client;
 
-    // try {
-    //   const url = "mongodb://localhost:27017";
-    //   client = await MongoClient.connect(url);
-    // } catch (error) {
-    //   res
-    //     .status(500)
-    //     .json({ message: error.message || "Could not connect to database." });
-    //   return;
-    // }
+    try {
+      const url = "mongodb://localhost:27017";
+      client = await MongoClient.connect(url);
+    } catch (error) {
+      res
+        .status(500)
+        .json({ message: error.message || "Could not connect to database." });
+      return;
+    }
 
-    // const dbName = "next-blog";
-    // const db = client.db(dbName);
+    const dbName = "next-blog";
+    const db = client.db(dbName);
 
-    // try {
-    //   const result = await db.collection("messages").insertOne(newMessage);
-    //   newMessage.id = result.insertedId;
-    // } catch (error) {
-    //   client.close();
-    //   res
-    //     .status(500)
-    //     .json({ message: error.message || "Storing message failed!" });
-    //   return;
-    // }
+    try {
+      const result = await db.collection("messages").insertOne(newMessage);
+      newMessage.id = result.insertedId;
+    } catch (error) {
+      client.close();
+      res
+        .status(500)
+        .json({ message: error.message || "Storing message failed!" });
+      return;
+    }
 
-    // client.close();
-
-    console.log(newMessage);
+    client.close();
 
     res
       .status(201)
